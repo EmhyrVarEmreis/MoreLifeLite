@@ -22,3 +22,5 @@
 *.zip
 tex/*
 13*
+.settings*
+.settings/*
