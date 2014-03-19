@@ -3,7 +3,7 @@
  Name        : MoreLifeLite.c
  Author      : Mateusz Stefaniak
  Contact     : mstef94@gmail.com
- Version     : 1.1.8 Beta
+ Version     : 1.2.1 Beta
  Copyright   : Arrrr! Welcome pirrates!
  Description : Life simulator, Very complex, Really, Ansi(not GANGAM, but similar)-style
  =======================================================================================
@@ -26,7 +26,7 @@
 #include "base/world.h"
 #include "base/worldprocessor.h"
 
-#ifdef WIN32
+#ifdef __MINGW32__
 int mkdir( char* );
 #else
 int mkdir (const char *filename, mode_t mode);
@@ -39,7 +39,7 @@ int main( int argc, char** argv ) {
 	options* o;
 	structs* s;
 	clock_t begin, end;
-	int n, dumps_num, tmp, step_progress;
+	int n, dumps_num, tmp, step_progress, error_n;
 	double time_spent;
 	char buf[3][256];
 
@@ -59,6 +59,7 @@ int main( int argc, char** argv ) {
 	s = structs_init();
 	dumps_num = 0;
 	step_progress = 0;
+	error_n = 0;
 
 	/*
 	 * Read options
@@ -68,8 +69,7 @@ int main( int argc, char** argv ) {
 
 	if ( o->options[11] ) {
 		help_show();
-		options_free( o );
-		return EXIT_SUCCESS;
+		goto ending;
 	}
 
 	/*
@@ -89,14 +89,30 @@ int main( int argc, char** argv ) {
 		help_ascii_art();
 
 	/*
+	 * Print info
+	 */
+	if ( !o->options[5] ) {
+		help_print_line();
+		printf( "OPTIONS:\n" );
+		help_print_options(o);
+		help_print_line();
+		if( ! ( o->options[4] || o->options[0] || o->options[1] || o->options[4] || o->options[7] || o->options[10] ) ) {
+			printf( "NO DATA OUTPUT? WHY ARE YOU RUNNING ME?\nDO YOU THINK I'M WORKING FOR FUN?\nYOU THINK YOU'RE FUNNY?\n\nI'D BETTER GO HOME! [WENT HOME CRYING]\n" );
+			error_n = -666;
+			goto ending;
+		}
+	}
+
+	/*
 	 * Structs read
 	 */
 	if ( o->strings[2][0] != '\0' ) {
 		if ( structs_read( o->strings[2], s ) )
-			printf( "Structs loaded: %d\n", s->n );
+			printf( "Loaded %d structures from file '%s'\n", s->n, o->strings[2] );
 		else {
 			fprintf( stderr, "Structs from file \"%s\" readed incorrectly!\nExiting!\n", o->strings[2] );
-			return -3;
+			error_n = -5;
+			goto ending;
 		}
 	}
 
@@ -113,7 +129,8 @@ int main( int argc, char** argv ) {
 			} else {
 				if ( !o->options[5] )
 					fprintf( stderr, "Grid loading as RANDOMIZED occured a problem!\nExiting!\n" );
-				return -2;
+				error_n = -4;
+				goto ending;
 			}
 		} else {
 			tmp = file_read_world( w, o->strings[1], s );
@@ -126,12 +143,14 @@ int main( int argc, char** argv ) {
 					fprintf( stderr, "Grid from file \"%s\" readed incorrectly!\nExiting!\n", o->strings[1] );
 			}
 			if ( tmp != 0 ) {
-				return -1;
+				error_n = -3;
+				goto ending;
 			}
 		}
 	} else {
 		fprintf( stderr, "File reading problem!\nExiting!\n" );
-		return -1;
+		error_n = -1;
+		goto ending;
 	}
 
 	/*
@@ -144,14 +163,15 @@ int main( int argc, char** argv ) {
 	 * Prepare paths
 	 */
 	if (o->strings[0][0] != '\0') {
-	#ifdef WIN32
+	#ifdef __MINGW32__
 		tmp = mkdir( o->strings[0] );
 	#else
 		tmp = mkdir( o->strings[0], S_IRWXU | S_IRWXG | S_IRWXO );
 	#endif
 		if ( tmp != -1 ) {
 			fprintf( stderr, "Directory '%s' do not exist! Create it first!\nExiting!\n", o->strings[0] );
-			return -1;
+			error_n = -2;
+			goto ending;
 		}
 	}
 	sprintf( buf[0], "%s%s%d", (o->strings[0][0] == '\0') ? "" : o->strings[0], (o->strings[0][0] == '\0') ? "" : "/", (int) time( NULL ) );
@@ -161,31 +181,31 @@ int main( int argc, char** argv ) {
 	sprintf( o->strings[6], "%s/%s", buf[0], "svg/" );
 	sprintf( o->strings[7], "%s/%s", buf[0], "txt/" );
 
-#ifdef WIN32
+#ifdef __MINGW32__
 	mkdir( buf[0] );
 #else
 	mkdir( buf[0], S_IRWXU | S_IRWXG | S_IRWXO );
 #endif
 	sprintf( buf[1], "%s/history", buf[0] );
-#ifdef WIN32
+#ifdef __MINGW32__
 	mkdir( buf[1] );
 #else
 	mkdir( buf[1], S_IRWXU | S_IRWXG | S_IRWXO );
 #endif
 	sprintf( buf[1], "%s/png", buf[0] );
-#ifdef WIN32
+#ifdef __MINGW32__
 	mkdir( buf[1] );
 #else
 	mkdir( buf[1], S_IRWXU | S_IRWXG | S_IRWXO );
 #endif
 	sprintf( buf[1], "%s/svg", buf[0] );
-#ifdef WIN32
+#ifdef __MINGW32__
 	mkdir( buf[1] );
 #else
 	mkdir( buf[1], S_IRWXU | S_IRWXG | S_IRWXO );
 #endif
 	sprintf( buf[1], "%s/txt", buf[0] );
-#ifdef WIN32
+#ifdef __MINGW32__
 	mkdir( buf[1] );
 #else
 	mkdir( buf[1], S_IRWXU | S_IRWXG | S_IRWXO );
@@ -204,15 +224,6 @@ int main( int argc, char** argv ) {
 	}
 
 	/*
-	 * Print info
-	 */
-	if ( !o->options[5] ) {
-		printf( "Generating PNG/SVG/TXT/GNUPLOT_FILE/HEAT_MAP -> %c/%c/%c/%c/%c\n", (o->options[0]) ? '+' : '-', (o->options[1]) ? '+' : '-',
-				(o->options[7]) ? '+' : '-', (o->options[10]) ? '+' : '-', (o->options[2]) ? '+' : '-' );
-		printf( "Starting...\n" );
-	}
-
-	/*
 	 * Start measuring time
 	 */
 	begin = clock();
@@ -225,11 +236,15 @@ int main( int argc, char** argv ) {
 	/*
 	 * Start cycling
 	 */
+	if ( !o->options[5] ) {
+			help_print_line();
+			printf( "STARTING...\n" );
+		}
 	for ( n = 0; n < o->options[8]; n++ ) {
 		/*
 		 * Make dump
 		 */
-		dumps_num = tool_make_dump( o, w, h, n, dumps_num, buf[0] );
+		tool_make_dump( o, w, h, n, &dumps_num );
 
 		/*
 		 * Process cells
@@ -243,14 +258,14 @@ int main( int argc, char** argv ) {
 		 * Print progress
 		 */
 		if ( !o->options[5] && (n % step_progress) == 0 )
-			printf( "\t%d%%\n", (int) (100.0 * n / o->options[8]) );
+			printf( "%d%%\n", (int) (100.0 * n / o->options[8]) );
 	}
 
 	/*
 	 * Ending operations - last dump & save heat map
 	 */
 	o->options[9] = n;
-	dumps_num = tool_make_dump( o, w, h, n, dumps_num, buf[0] );
+	tool_make_dump( o, w, h, n, &dumps_num );
 	if ( o->options[2] ) {
 		if ( o->options[0] ) {
 			sprintf( buf[0], "%sheating_map_of_changes.png", o->strings[4] );
@@ -273,17 +288,21 @@ int main( int argc, char** argv ) {
 	time_spent = (double) (end - begin) / CLOCKS_PER_SEC;
 
 	if ( !o->options[5] ) {
-		printf( "Done!\n" );
+		printf( "DONE!\n" );
+		help_print_line();
 		printf( "Dumped %d states to '%s%s/'\n", dumps_num, (buf[2][0] == '/') ? "" : "CURRENT_DIRECTORY/", buf[2] );
 		printf( "Running time: %gs\n", time_spent );
 	}
 
 	/*
+	 * GO-TO INSTRUCTION
+	 */
+	ending:
+	/*
 	 * Free memory
 	 */
 	world_free( w );
-	if ( h != NULL )
-		world_free( h );
+	world_free( h );
 	if ( o->gnuplot != NULL )
 		fclose( o->gnuplot );
 	options_free( o );
@@ -291,6 +310,6 @@ int main( int argc, char** argv ) {
 	/*
 	 * VICTORY!
 	 */
-	return EXIT_SUCCESS;
+	return (error_n) ? error_n : EXIT_SUCCESS;
 }
 

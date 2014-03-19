@@ -21,7 +21,7 @@
  * @param buf			BUFOR FOR STRING OPERATIONS
  * @return				NEXT DUMP NUMBER
  */
-int			tool_make_dump			( options* o, world* w, world* h, int n, int dumps_num, char* buf );
+void		tool_make_dump			( options* o, world* w, world* h, int n, int* dumps_num );
 
 /**
  * Compares two strings limited to preffered size.

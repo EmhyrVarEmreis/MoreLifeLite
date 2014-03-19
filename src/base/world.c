@@ -44,8 +44,10 @@ void world_clear( world* w ) {
 }
 
 void world_free( world* w ) {
-	free( w->data );
-	free( w );
+	if ( w != NULL ) {
+		free( w->data );
+		free( w );
+	}
 }
 
 void world_print( world* w ) {

@@ -24,17 +24,18 @@ structs* structs_init() {
 int structs_read( char* filename, structs* s ) {
 	FILE *f;
 	int c, tx, ty;
-	char tc;
+	char* tc;
 
+	tc = malloc( sizeof *tc * 256 );
 	c = 0;
-	tc = 0;
+	tc[0] = 0;
 
 	f = fopen( filename, "r" );
 	if ( f == NULL )
 		return 0;
 
-	while (fscanf( f, "%c %d %d", &tc, &tx, &ty ) == 3) {
-		if ( struct_add( s, tc, world_init( tx, ty ) ) ) {
+	while (fscanf( f, "%s %d %d", tc, &tx, &ty ) == 3) {
+		if ( struct_add( s, tc[0], world_init( tx, ty ) ) ) {
 			tx = 0;
 			ty = 0;
 			while ((c = fgetc( f )) != '\n')

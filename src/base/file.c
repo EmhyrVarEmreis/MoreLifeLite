@@ -18,7 +18,7 @@ int file_read_world( world* w, char* filename, structs* s ) {
 	FILE *f;
 	int c;
 	int filetype;
-	char tp;
+	char* tp;
 	int x, y;
 
 	/*
@@ -44,6 +44,7 @@ int file_read_world( world* w, char* filename, structs* s ) {
 	}
 
 	world_resize( w, w->x, w->y );
+	world_clear( w );
 
 	if ( filetype == 1 ) {
 		int x, y;
@@ -73,10 +74,13 @@ int file_read_world( world* w, char* filename, structs* s ) {
 	} else if ( filetype != 2 || s == NULL ) {
 		return 3;
 	}
+	
+	tp = malloc( sizeof *tp * 256 );
 
-	x = y = tp = 0;
-	while (fscanf( f, "%c %d %d", &tp, &x, &y ) == 3) {
-		structs_insert_to_world( w, structs_get( s, tp ), x, y );
+	x = y = tp[0] = 0;
+
+	while (fscanf( f, "%s %d %d", tp, &x, &y ) == 3) {
+		structs_insert_to_world( w, structs_get( s, tp[0] ), x, y );
 		while ((c = fgetc( f )) != '\n')
 			if ( c == EOF )
 				break;

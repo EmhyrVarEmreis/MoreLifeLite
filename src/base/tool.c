@@ -17,35 +17,47 @@
 #include "world.h"
 #include "worldprocessor.h"
 
-int tool_make_dump( options* o, world* w, world* h, int n, int dumps_num, char* buf ) {
-	int w_alive;
-	if ( o->options[3] )
+static int w_alive;
+static char buf[256];
+
+void set_ext(char* s, char a, char b, char c) {
+	while(*s)
+		s++;
+	*(--s) = c;
+	*(--s) = b;
+	*(--s) = a;
+}
+
+void tool_make_dump( options* o, world* w, world* h, int n, int* dumps_num ) {
+	if ( o->options[3] || o->options[10] )
 		w_alive = worldprocessor_alive_cells_count( w );
 	else
 		w_alive = -2;
-	if ( o->options[0] || o->options[1] || o->options[4] || o->options[7] )
-		if ( ((n) % o->options[9]) == 0 ) {
-			dumps_num++;
-			if ( o->options[0] ) {
-				sprintf( buf, "%s%d.png", o->strings[5], n );
-				save_png( w, buf, n, w_alive );
-			}
-			if ( o->options[1] ) {
-				sprintf( buf, "%s%d.svg", o->strings[6], n );
-				save_svg( w, buf, n, w_alive );
-			}
-			if ( o->options[7] ) {
-				sprintf( buf, "%s%d.txt", o->strings[7], n );
-				file_save_world( w, buf, n, w_alive );
-			}
-			if ( o->options[4] ) {
-				world_print( w );
-			}
+	if ( (o->options[0] || o->options[1] || o->options[4] || o->options[7]) && !((n) % o->options[9]) ) {
+		(*dumps_num)++;
+		sprintf( buf, "%s%d.png", o->strings[5], n );
+		if ( o->options[0] ) {
+			/*sprintf( buf, "%s%d.png", o->strings[5], n );*/
+			set_ext(buf, 'p', 'n', 'g');
+			save_png( w, buf, n, w_alive );
 		}
-	if ( o->options[10] )
-		if ( ((n) % o->options[10]) == 0 )
-			file_stats_gnuplot_write( o->gnuplot, n, (w_alive >= 0) ? w_alive : worldprocessor_alive_cells_count( w ) );
-	return dumps_num;
+		if ( o->options[1] ) {
+			/*sprintf( buf, "%s%d.svg", o->strings[6], n );*/
+			set_ext(buf, 's', 'v', 'g');
+			save_svg( w, buf, n, w_alive );
+		}
+		if ( o->options[7] ) {
+			/*sprintf( buf, "%s%d.txt", o->strings[7], n );*/
+			set_ext(buf, 't', 'x', 't');
+			file_save_world( w, buf, n, w_alive );
+		}
+		if ( o->options[4] ) {
+			world_print( w );
+		}
+	}
+
+	if ( o->options[10] && !((n) % o->options[10]) )
+		file_stats_gnuplot_write( o->gnuplot, n, w_alive );
 }
 
 int tool_str_cmp( char* a, char* b, int c ) {

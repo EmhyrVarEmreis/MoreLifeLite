@@ -100,6 +100,7 @@ void options_set_defaults( options* o ) {
 	for ( i = 0; i < n; i++ )
 		o->options[i] = 0;
 	o->options[3] = 1;
+	o->options[9] = 1;
 	n = (sizeof o->strings / sizeof o->strings[0]);
 	for ( i = 0; i < n; i++ )
 		o->strings[i][0] = '\0';
