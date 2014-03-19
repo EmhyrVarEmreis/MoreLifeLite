@@ -1,6 +1,6 @@
 MoreLifeLite
 ============
-'Mateusz Stefaniak, 2014'
+`Mateusz Stefaniak, 2014`
 
 Description - POL
 -----------------
