@@ -1,2 +1,2 @@
-morelife
+MoreLifeLite
 ========
