@@ -32,6 +32,8 @@ int mkdir( char* );
 int mkdir (const char *filename, mode_t mode);
 #endif
 
+static int ERROR_ID;
+
 int main( int argc, char** argv ) {
 
 	world* w;
@@ -39,7 +41,7 @@ int main( int argc, char** argv ) {
 	options* o;
 	structs* s;
 	clock_t begin, end;
-	int n, dumps_num, tmp, step_progress, error_n;
+	int n, dumps_num, tmp, step_progress;
 	double time_spent;
 	char buf[3][256];
 
@@ -59,7 +61,7 @@ int main( int argc, char** argv ) {
 	s = structs_init();
 	dumps_num = 0;
 	step_progress = 0;
-	error_n = 0;
+	ERROR_ID = 0;
 
 	/*
 	 * Read options
@@ -98,7 +100,7 @@ int main( int argc, char** argv ) {
 		help_print_line();
 		if( ! ( o->options[4] || o->options[0] || o->options[1] || o->options[4] || o->options[7] || o->options[10] ) ) {
 			printf( "NO DATA OUTPUT? WHY ARE YOU RUNNING ME?\nDO YOU THINK I'M WORKING FOR FUN?\nYOU THINK YOU'RE FUNNY?\n\nI'D BETTER GO HOME! [WENT HOME CRYING]\n" );
-			error_n = -666;
+			ERROR_ID = -666;
 			goto ending;
 		}
 	}
@@ -111,7 +113,7 @@ int main( int argc, char** argv ) {
 			printf( "Loaded %d structures from file '%s'\n", s->n, o->strings[2] );
 		else {
 			fprintf( stderr, "Structs from file \"%s\" readed incorrectly!\nExiting!\n", o->strings[2] );
-			error_n = -5;
+			ERROR_ID = -5;
 			goto ending;
 		}
 	}
@@ -129,7 +131,7 @@ int main( int argc, char** argv ) {
 			} else {
 				if ( !o->options[5] )
 					fprintf( stderr, "Grid loading as RANDOMIZED occured a problem!\nExiting!\n" );
-				error_n = -4;
+				ERROR_ID = -4;
 				goto ending;
 			}
 		} else {
@@ -143,13 +145,13 @@ int main( int argc, char** argv ) {
 					fprintf( stderr, "Grid from file \"%s\" readed incorrectly!\nExiting!\n", o->strings[1] );
 			}
 			if ( tmp != 0 ) {
-				error_n = -3;
+				ERROR_ID = -3;
 				goto ending;
 			}
 		}
 	} else {
 		fprintf( stderr, "File reading problem!\nExiting!\n" );
-		error_n = -1;
+		ERROR_ID = -1;
 		goto ending;
 	}
 
@@ -170,7 +172,7 @@ int main( int argc, char** argv ) {
 	#endif
 		if ( tmp != -1 ) {
 			fprintf( stderr, "Directory '%s' do not exist! Create it first!\nExiting!\n", o->strings[0] );
-			error_n = -2;
+			ERROR_ID = -2;
 			goto ending;
 		}
 	}
@@ -310,6 +312,6 @@ int main( int argc, char** argv ) {
 	/*
 	 * VICTORY!
 	 */
-	return (error_n) ? error_n : EXIT_SUCCESS;
+	return (ERROR_ID) ? ERROR_ID : EXIT_SUCCESS;
 }
 
