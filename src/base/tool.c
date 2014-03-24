@@ -20,9 +20,18 @@
 static int w_alive;
 static char buf[256];
 
-void set_ext(char* s, char a, char b, char c) {
-	while(*s)
+
+/*
+ * Replacing strings in paths - works faster than 2x sprintf
+ */
+void set_path_ext( char* s, char a, char b, char c ) {
+	while (*s)
 		s++;
+	*(--s) = c;
+	*(--s) = b;
+	*(--s) = a;
+	while (*s != '/')
+		s--;
 	*(--s) = c;
 	*(--s) = b;
 	*(--s) = a;
@@ -35,20 +44,20 @@ void tool_make_dump( options* o, world* w, world* h, int n, int* dumps_num ) {
 		w_alive = -2;
 	if ( (o->options[0] || o->options[1] || o->options[4] || o->options[7]) && !((n) % o->options[9]) ) {
 		(*dumps_num)++;
-		sprintf( buf, "%s%d.png", o->strings[5], n );
+		sprintf( buf, "%s%.9d.png", o->strings[5], n );
 		if ( o->options[0] ) {
 			/*sprintf( buf, "%s%d.png", o->strings[5], n );*/
-			set_ext(buf, 'p', 'n', 'g');
+			set_path_ext( buf, 'p', 'n', 'g' );
 			save_png( w, buf, n, w_alive );
 		}
 		if ( o->options[1] ) {
 			/*sprintf( buf, "%s%d.svg", o->strings[6], n );*/
-			set_ext(buf, 's', 'v', 'g');
+			set_path_ext( buf, 's', 'v', 'g' );
 			save_svg( w, buf, n, w_alive );
 		}
 		if ( o->options[7] ) {
 			/*sprintf( buf, "%s%d.txt", o->strings[7], n );*/
-			set_ext(buf, 't', 'x', 't');
+			set_path_ext( buf, 't', 'x', 't' );
 			file_save_world( w, buf, n, w_alive );
 		}
 		if ( o->options[4] ) {
