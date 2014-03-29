@@ -21,10 +21,6 @@ int file_read_world( world* w, char* filename, structs* s ) {
 	char* tp;
 	int x, y;
 
-	/*
-	 * TODO Komentarze w plikach
-	 */
-
 	f = fopen( filename, "r" );
 	if ( f == NULL )
 		return 1;
@@ -33,6 +29,7 @@ int file_read_world( world* w, char* filename, structs* s ) {
 
 	c = fgetc( f );
 
+	/* Determine filetype */
 	if ( c == 'A' )
 		filetype = 1;
 	else if ( c == 'B' )
@@ -43,6 +40,7 @@ int file_read_world( world* w, char* filename, structs* s ) {
 		return 2;
 	}
 
+	/* Set preffered world size */
 	world_resize( w, w->x, w->y );
 	world_clear( w );
 
@@ -74,11 +72,12 @@ int file_read_world( world* w, char* filename, structs* s ) {
 	} else if ( filetype != 2 || s == NULL ) {
 		return 3;
 	}
-	
+
 	tp = malloc( sizeof *tp * 256 );
 
 	x = y = tp[0] = 0;
 
+	/* Reading and inserting structures */
 	while (fscanf( f, "%s %d %d", tp, &x, &y ) == 3) {
 		structs_insert_to_world( w, structs_get( s, tp[0] ), x, y );
 		while ((c = fgetc( f )) != '\n')
@@ -101,8 +100,10 @@ int file_save_world( world* w, char* filename, int cycle_number, int alive_cells
 	if ( f == NULL )
 		return 0;
 
+	/* Print filetype and grid size */
 	fprintf( f, "A %d %d", w->x, w->y );
 
+	/* Print grid */
 	for ( i = 0; i < w->size; i++ ) {
 		if ( !(i % w->x) )
 			fputc( '\n', f );

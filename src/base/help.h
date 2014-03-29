@@ -20,8 +20,16 @@ void help_ascii_art( );
  */
 void help_show( );
 
+/**
+ * Ptints horizontal line.
+ */
 void help_print_line( );
 
+
+/**
+ * Prints options to stdout.
+ * @param o		POINTER TO OPTIONS
+ */
 void help_print_options( options* o );
 
 #endif /* HELP_H_ */

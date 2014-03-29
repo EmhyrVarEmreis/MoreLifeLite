@@ -10,21 +10,24 @@
 
 #include <stdio.h>
 
+/**
+ * Structure, which holds options
+ */
 typedef struct {
 		int options[12];
 		/*
-		 * 0  - ch_png_gen
-		 * 1  - ch_svg_gen
-		 * 2  - ch_history_heat_map_gen
-		 * 3  - ch_statistic_gen
-		 * 4  - ch_state_to_stdout
-		 * 5  - silent_mode
-		 * 6  - torus
-		 * 7  - ch_txt_gen
-		 * 8  - cycle_number
-		 * 9  - frequency
-		 * 10 - gnuplot_gen
-		 * 11 - help_show
+		 * 0  - generate PNG images
+		 * 1  - generate SVG images
+		 * 2  - generate heat map
+		 * 3  - generate statistics
+		 * 4  - print states to stdout
+		 * 5  - silent (no basic information to stdout) mode
+		 * 6  - torus simulation
+		 * 7  - generate TXT files
+		 * 8  - number of cycles
+		 * 9  - frequency of dumps
+		 * 10 - generate gnuplot files
+		 * 11 - show help
 		 */
 		char strings[8][256];
 		/*
