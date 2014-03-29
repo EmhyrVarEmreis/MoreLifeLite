@@ -65,6 +65,7 @@ int save_png( world* w, char* filename, int cycle, int alive ) {
 
 	i = 0;
 
+	/* Write pixels */
 	for ( i = 0; i < w->size; i++ )
 		if ( w->data[i] > MLL_CELL_BORDER ) {
 			image[4 * i + 0] = 0;

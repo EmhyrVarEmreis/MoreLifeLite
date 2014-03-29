@@ -30,9 +30,12 @@ void rules_set( char* r ) {
 
 	rules_clear();
 
-	a = 10;
+	/* Set alive mode */
+	a = MLL_CELL_DEAD;
 
+	/* Read from string */
 	while (isdigit( *r ) || *r == '/') {
+		/* Swith mode when '/' occures */
 		if ( *r == '/' )
 			a = -1;
 		else

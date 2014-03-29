@@ -26,10 +26,12 @@ int structs_read( char* filename, structs* s ) {
 	int c, tx, ty;
 	char* tc;
 
+	/* Buffer */
 	tc = malloc( sizeof *tc * 256 );
 	c = 0;
 	tc[0] = 0;
 
+	/* Open */
 	f = fopen( filename, "r" );
 	if ( f == NULL )
 		return 0;
@@ -38,13 +40,16 @@ int structs_read( char* filename, structs* s ) {
 		if ( struct_add( s, tc[0], world_init( tx, ty ) ) ) {
 			tx = 0;
 			ty = 0;
+			/* Escape \n */
 			while ((c = fgetc( f )) != '\n')
 						;
+			/* Read */
 			while ((c = fgetc( f )) != EOF) {
 				if ( c == '\n' ) {
 					ty++;
 					tx = 0;
 				} else {
+					/* Save to structure */
 					s->data[s->n-1]->data[tx + s->data[s->n-1]->x * ty] = (c == 'A' ? MLL_CELL_ALIVE : MLL_CELL_DEAD);
 					tx++;
 				}
@@ -70,7 +75,6 @@ world* structs_get( structs* s, char id ) {
 }
 
 int struct_add( structs* s, char c, world* w ) {
-	/*s->data[s->n] = malloc(sizeof *s->data[s->n]);*/
 	if ( s->n >= STRUCTS_MAX || structs_get( s, c ) != NULL )
 		return 0;
 	s->data[s->n] = w;
@@ -81,10 +85,13 @@ int struct_add( structs* s, char c, world* w ) {
 
 int structs_insert_to_world( world* w, world* s, int x, int y ) {
 	int i, j;
+	/* Check pointers */
 	if ( w == NULL || s == NULL )
 		return 0;
+	/* Check sizes */
 	if ( s->x + x > w->x || s->y + y > w->y )
 		return 0;
+	/* Place structure */
 	for ( i = 0; i < s->y; i++ ) {
 		for ( j = 0; j < s->x; j++ ) {
 			w->data[(i + y) * w->x + (j + x)] = s->data[i * s->x + j];

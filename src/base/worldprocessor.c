@@ -36,12 +36,17 @@ void worldprocessor_process_cells_torus( world* w ) {
 	/*
 	 * TODO Ulepszyæ torus
 	 */
+	/* Iterate - cols */
 	for ( i = 0; i < w->y; i++ )
+		/* Iterate - rows */
 		for ( j = 0; j < w->x; j++ )
+			/* Take only alive cells */
 			if ( w->data[j + i * w->x] > MLL_CELL_BORDER )
+				/* Iterate for one backwards and one forwards - cols */
 				for ( y = i - 1; y < i + 2; y++ )
+					/* Iterate for one backwards and one forwards - rows */
 					for ( x = j - 1; x < j + 2; x++ ) {
-						/*printf("%d,%d  ->  %d,%d\t\t%d %d\n", x, y, x % w->x, y % w->y, w->x, w->y);*/
+						/* Determine - torus borders (or better - 'non-borders')*/
 						w->data[( x == -1 ? w->x-1 : x % (w->x)) + ( y == -1 ? w->y-1 : y % (w->y)) * w->x]++;
 					}
 }

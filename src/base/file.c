@@ -55,11 +55,12 @@ int file_read_world( world* w, char* filename, structs* s ) {
 			;
 		if ( c != EOF )
 			while ((c = fgetc( f )) != EOF) {
-
+				/* Escape \n */
 				if ( c == '\n' ) {
 					y++;
 					x = 0;
 				} else {
+					/* Save to grid */
 					w->data[x + w->x * y] = (c == 'A' ? MLL_CELL_ALIVE : MLL_CELL_DEAD);
 					x++;
 				}
@@ -73,13 +74,16 @@ int file_read_world( world* w, char* filename, structs* s ) {
 		return 3;
 	}
 
+	/* Buffer */
 	tp = malloc( sizeof *tp * 256 );
 
 	x = y = tp[0] = 0;
 
-	/* Reading and inserting structures */
+	/* Reading structures */
 	while (fscanf( f, "%s %d %d", tp, &x, &y ) == 3) {
+		/* Inserting to world grid */
 		structs_insert_to_world( w, structs_get( s, tp[0] ), x, y );
+		/* Escape \n */
 		while ((c = fgetc( f )) != '\n')
 			if ( c == EOF )
 				break;
