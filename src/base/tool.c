@@ -101,3 +101,10 @@ int tool_set_world_size( world* w, char* a ) {
 		return 0;
 
 }
+
+int tool_search_string( int n, char** array, char* str ) {
+	while( --n )
+		if ( strcmp( array[n], str ) == 0 )
+			return 1;
+	return 0;
+}

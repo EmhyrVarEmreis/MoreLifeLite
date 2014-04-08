@@ -64,6 +64,9 @@ int			options_parse			( options* o, int argc_a, char** argv_a);
  */
 void		options_set_defaults	( options* o );
 
+/* TODO Komentaz  */
+int		options_check_min	( int argc, char** argv );
+
 /**
  * Frees memory.
  * @param o			POINTER TO OPTIONS

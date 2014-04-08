@@ -40,4 +40,7 @@ int			tool_str_cmp			( char* a, char* b, int c );
  */
 int			tool_set_world_size		( world* w, char* a );
 
+/* TODO Komentarz */
+int			tool_search_string		( int n, char** array, char* str );
+
 #endif /* TOOL_H_ */

@@ -66,6 +66,8 @@ int main( int argc, char** argv ) {
 	/*
 	 * Read options
 	 */
+    if(!options_check_min( argc, argv ))
+            goto ending;
 	options_set_defaults( o );
 	options_parse( o, argc, argv );
 

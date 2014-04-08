@@ -12,6 +12,7 @@
 #include <string.h>
 
 #include "options.h"
+#include "tool.h"
 
 options* options_init() {
 	options * o;
@@ -101,6 +102,7 @@ void options_set_defaults( options* o ) {
 		o->options[i] = 0;
 	o->options[3] = 1;
 	o->options[9] = 1;
+	o->options[8] = 100;
 	n = (sizeof o->strings / sizeof o->strings[0]);
 	for ( i = 0; i < n; i++ )
 		o->strings[i][0] = '\0';
@@ -108,6 +110,20 @@ void options_set_defaults( options* o ) {
 
 }
 
+int options_check_min( int argc, char** argv ) {
+	if ( !tool_search_string( argc, argv, "-l" ) ) {
+		fprintf( stderr, "Option '-l FILE' is required!\n" );
+		return 0;
+	} /*else if( !tool_search_string( argc, argv, "-n" ) ) {
+	 fprintf( stderr, "Option '-n NUMBER' is required!\n" );
+	 return 0;
+	 } else if ( !tool_search_string( argc, argv, "-m" ) ) {
+	 fprintf( stderr, "Option '-m NUMBER' is required!\n" );
+	 return 0;
+	 }*/
+	return 1;
+}
+
 void options_free( options* o ) {
-	free(o);
+	free( o );
 }
