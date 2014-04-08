@@ -64,7 +64,13 @@ int			options_parse			( options* o, int argc_a, char** argv_a);
  */
 void		options_set_defaults	( options* o );
 
-/* TODO Komentaz  */
+/**
+ * Checks for unsetted arguments in aguments array for thoose
+ *  which are required to lauch program properly.
+ * @param argc		ARRAY LENGTH
+ * @param argv		POINTER TO ARRAY
+ * @return
+ */
 int		options_check_min	( int argc, char** argv );
 
 /**

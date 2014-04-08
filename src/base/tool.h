@@ -40,7 +40,13 @@ int			tool_str_cmp			( char* a, char* b, int c );
  */
 int			tool_set_world_size		( world* w, char* a );
 
-/* TODO Komentarz */
+/**
+ * Search a string in strings array.
+ * @param n				ARRAY LENGTH
+ * @param array			POINTER TO ARRAY
+ * @param str			POINTER TO STRING TO SEARCH FOR
+ * @return
+ */
 int			tool_search_string		( int n, char** array, char* str );
 
 #endif /* TOOL_H_ */
