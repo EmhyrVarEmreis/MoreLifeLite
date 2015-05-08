@@ -2,8 +2,8 @@
  =======================================================================================
  Name        : MoreLifeLite.c
  Author      : Mateusz Stefaniak
- Contact     : mstef94@gmail.com
- Version     : 1.2.1 Beta
+ Contact     : stefanm1@iem.pw.edu.pl, mateusz.stefaniak@morecraft.pl, mstef94@gmail.com
+ Version     : 1.2.2 Beta
  Copyright   : Arrrr! Welcome pirrates!
  Description : Life simulator, Very complex, Really, Ansi(not GANGAM, but similar)-style
  =======================================================================================
