@@ -3,7 +3,7 @@
  Name        : MoreLifeLite.c
  Author      : Mateusz Stefaniak
  Contact     : stefanm1@iem.pw.edu.pl, mateusz.stefaniak@morecraft.pl, mstef94@gmail.com
- Version     : 1.2.2 Beta
+ Version     : 1.3.0 Beta
  Copyright   : Arrrr! Welcome pirrates!
  Description : Life simulator, Very complex, Really, Ansi(not GANGAM, but similar)-style
  =======================================================================================
@@ -64,17 +64,16 @@ int main( int argc, char** argv ) {
 	ERROR_ID = 0;
 
 	/*
-	 * Read options
+	 * Read options - Check help first
 	 */
-    if(!options_check_min( argc, argv ))
+    if( argc == 1 || options_check_help( argc, argv ) ) {
+        help_show();
+	goto ending;
+    }
+    if( !options_check_min( argc, argv ) )
             goto ending;
 	options_set_defaults( o );
 	options_parse( o, argc, argv );
-
-	if ( o->options[11] ) {
-		help_show();
-		goto ending;
-	}
 
 	/*
 	 * Rules managing

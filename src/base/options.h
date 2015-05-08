@@ -56,13 +56,21 @@ options*	options_init			();
  * @param argv_a	ARGC ARRAY
  * @return			1/0 - OK / ERRORS OCCURED
  */
-int			options_parse			( options* o, int argc_a, char** argv_a);
+int			options_parse		( options* o, int argc_a, char** argv_a);
 
 /**
  * Sets default options.
  * @param o			POINTER TO OPTIONS
  */
-void		options_set_defaults	( options* o );
+void		options_set_defaults		( options* o );
+
+/**
+ * Checks if help argument is set.
+ * @param argc          ARRAY LENGTH
+ * @param argv          POINTER TO ARRAY
+ * @return		0 IF NOT SET; 1 IF SET
+ */
+int             options_check_help		( int argc, char** argv );
 
 /**
  * Checks for unsetted arguments in aguments array for thoose
@@ -71,7 +79,7 @@ void		options_set_defaults	( options* o );
  * @param argv		POINTER TO ARRAY
  * @return
  */
-int		options_check_min	( int argc, char** argv );
+int		options_check_min		( int argc, char** argv );
 
 /**
  * Frees memory.

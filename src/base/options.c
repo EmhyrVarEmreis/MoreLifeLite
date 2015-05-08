@@ -110,8 +110,15 @@ void options_set_defaults( options* o ) {
 
 }
 
+int options_check_help( int argc, char** argv ) {
+	if ( tool_search_string( argc, argv, "-h" ) ) {
+		return 1;
+	}
+	return 0;
+}
+
 int options_check_min( int argc, char** argv ) {
-	if ( !tool_search_string( argc, argv, "-l" ) && !tool_search_string( argc, argv, "-h" ) ) {
+	if ( !tool_search_string( argc, argv, "-l" ) ) {
 		fprintf( stderr, "Option '-l FILE' is required!\n" );
 		return 0;
 	} /*else if( !tool_search_string( argc, argv, "-n" ) ) {
