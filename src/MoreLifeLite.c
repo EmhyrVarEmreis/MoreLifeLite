@@ -165,7 +165,7 @@ int main( int argc, char** argv ) {
 	/*
 	 * Prepare paths
 	 */
-	if (o->strings[0][0] != '\0') {
+	if ( o->strings[0][0] != '\0' ) {
 	#ifdef __MINGW32__
 		tmp = mkdir( o->strings[0] );
 	#else
@@ -301,11 +301,13 @@ int main( int argc, char** argv ) {
 	 * GO-TO INSTRUCTION
 	 */
 	ending:
+
 	/*
 	 * Free memory
 	 */
 	world_free( w );
-	world_free( h );
+	if ( o->options[2] )
+		world_free( h );
 	if ( o->gnuplot != NULL )
 		fclose( o->gnuplot );
 	options_free( o );

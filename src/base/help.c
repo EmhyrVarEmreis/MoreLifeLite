@@ -42,7 +42,7 @@ states in the form of PNG, SVG, TXT and log files for gnuplot."
 void help_ascii_art() {
 	printf(
 			"    __  ___                __    _ ____     __    _ __     \n   /  |/  ____  ________  / /   (_/ _____  / /   (_/ /____ \n  / /|_/ / __ \\/ ___/ _ \\/ /   / / /_/ _ \\/ /   / / __/ _ \\\n / /  / / /_/ / /  /  __/ /___/ / __/  __/ /___/ / /_/  __/\n/_/  /_/\\____/_/   \\___/_____/_/_/  \\___/_____/_/\\__/\\___/ \n\n" );
-	printf( "\n\t\t   Version 1.2.2 Beta\n\n" );
+	printf( "\n\t\t   Version 1.2.3 Beta\n\n" );
 }
 
 void help_print_line() {
